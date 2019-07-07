@@ -255,8 +255,8 @@ void Character::ResetFrame()
 }
 void Character::Jump(bool j)
 {
-	if (j) dy = -0.43; //short
-	else dy = -0.60;	  //long
+	if (j) dy = -short_jump_dy; //short
+	else dy = -long_jump_dy;	  //long
 }
 
 
@@ -387,8 +387,9 @@ void Character::Run()
 void Character::InteractionWithMap()
 {
 	
-	float deltaX = dx*time > max_dx ? max_dx : dx*time;
+	float deltaX = abs(dx*time) > max_dx ? max_dx*dx/abs(dx) : dx*time;
 	float deltaY = dy*time > max_dy ? max_dy : dy*time;
+	
 	x = pos.x + deltaX;//- window.getSize().x/2 + herosprite.getTextureRect().width/2
 	y = pos.y;//- window.getSize().y/2
 	//if (pos.x+deltaX > 600 && herosprite.getPosition().x >= 200)  
@@ -417,19 +418,27 @@ void Character::InteractionWithMap()
 	//	herosprite.setPosition(herosprite.getPosition()+sf::Vector2f(0,deltaY));
 		pos.y += deltaY;
 		general_data.Increm_Screen_Pos(0, deltaY);
-		
+		if (Status != short_jump && Status != long_jump&&Status!=jump && Status!=stop_falling &&  Previous!=short_jump&& Previous!=long_jump) { cout << "Falling 2   " << Status; Status = falling; }
 	//	cout << "  herosprite" << herosprite.getPosition().x << " " << herosprite.getPosition().x << "  POS=" << pos.x << " " << pos.y;
 	/*if (State==inair)*/	dy += gravity*time;
-		if (State == standing) 
-		{ State = inair;
-		  if (Status!=short_jump && Status!=long_jump) Status = falling;
-		}
+	cout << "Dy=" << dy << endl;
+
+	if (State == standing)
+	{
+		State = inair;
+		cout << "QQQ";
+	//		if (/*Status != short_jump && Status != long_jump&&Status!=jump && Status!=stop_falling &&*/ dy>0.12/*&& Previous!=short_jump&& Previous!=long_jump*/) { cout << "Falling 2   " << Status; Status = falling;  }
+
+	}
+	State = inair;
 	}
 	else
 	{	
-		if (State == inair) { State = standing;	dy = 0.1; Status = waiting; }
-		/*if (abs(deltaX) < 0.01)
-			Edge();*/
+		if (State == inair) { Stop_Falling(); cout << "     Falling END  " << Status; /*State = standing;	dy = 0.1; Status = waiting; */ }
+
+		State = standing;
+		if (abs(deltaX) < 0.01 &&Status!=jump&&Status!=long_jump&&Status!=short_jump&& Status!=run&& Status!=balancing)
+			Edge();
 	
 		//cout << "stop";
 	}
@@ -437,38 +446,59 @@ void Character::InteractionWithMap()
 
 	//  CameraGoForHero(x, y);
 }
+
+void Character::Stop_Falling()
+{
+	Status = stop_falling;
+	int i = 10;
+	while (i != 0)
+	{
+		while (InteractionWithMapY(i*0.1))
+		{
+			pos.y += i*0.1;
+			general_data.Increm_Screen_Pos(0, i*0.1);
+		}
+		i--;
+	}
+	 State = standing;	dy = 0.1;
+	 if (abs(dx) < 0.1) Status = waiting; else Status = run;
+}
+
 void Character::Balancing()
 {
 
-	//int v[8] = { 0,137,263,395,512,628,760,875};
+	int v[8] = { 0,137,263,395,512,628,760,875};
 //	int v[15] = { 0,137,263,395,512,628,760,875 ,760,628,512,395,263,137,0};
-	int v[14] = { 0,137,263,395,512,628,760,875 ,263,395,512,628,760,875 };
+	//int v[14] = { 0,137,263,395,512,628,760,875 ,263,395,512,628,760,875 };
 	//	int y[3] = { 1590,1590,1590,1590,1590 };
 	//int c[3] = { -5,-5,-5,-5,-5 };*/
-//	int h[8] = { 0,-8,-8,-8,-8,-8,-8,-8};
+	int c[8] = { 0,-8,-8,-8,-8,-8,-8,-8};
 	//int c[14] = { 0,-8,-8,-8,-8,-10,-11,-11 ,-8,-8,-8,-10,-11,-11}; 
-	int c[14] = { -0,-11,-11,-11,-11,-11,-11,-11 ,-11,-11,-11,-11,-11,-11 };
+	//int c[14] = { -0,-11,-11,-11,-11,-11,-11,-11 ,-11,-11,-11,-11,-11,-11 };
 	//	int h[15] = { 0,-8,-8,-8,-8,-8,-8,-8 ,-8,-8,-8,-8,-8,-8,0 };
 	int y = 1240;
 
 	herosprite.setTextureRect(sf::IntRect(v[int(CurFrame)], y, int(CurFrame)==3|| int(CurFrame) == 6||int(CurFrame)==9||int(CurFrame)==12 ? 125:135, 100));
-
+//	herosprite.setTextureRect(sf::IntRect(v[int(CurFrame)], y,  125 , 100));
+	int j[8] = { -3,0,0,2, 1,5,6,8 };
 	if (dir)
 	{
 		herosprite.setScale(1, 1);
-		herosprite.setOrigin(c[int(CurFrame)], -20);//-30
+		herosprite.setOrigin(c[int(CurFrame)]+j[int(CurFrame)], -20);//-30
 	}
 	else
 	{
 		herosprite.setScale(-1, 1);
-		herosprite.setOrigin( c[int(CurFrame)]+130,-20);//-30
+		herosprite.setOrigin( c[int(CurFrame)]+130 + j[int(CurFrame)],-20);//-30
 	}
 
 //	CurFrame += 0.002*time;
-	CurFrame += 0.0045*time;
-	if (CurFrame > 13) CurFrame -=11;
+	CurFrame += 0.0035*time;
+	if (int(CurFrame) > 7) CurFrame -=8;
 
 }
+
+
 
 void  Character::Jump(float df)
 {
@@ -487,12 +517,14 @@ void  Character::Jump(float df)
 	int y = 1590;
 
 	herosprite.setTextureRect(sf::IntRect(v[int(CurFrame)] , y, 100, 110));
+
 //	int h = -25;
 	
 	if (dir)
-		{
+	{
+		cout << "Right_JUMP";
 			herosprite.setScale(1, 1);
-			herosprite.setOrigin(cc-0, h[int(CurFrame)]+5+0*35);
+			herosprite.setOrigin(cc-0+20, h[int(CurFrame)]+5+0*35);
 		}
 		else
 		{
@@ -505,7 +537,44 @@ void  Character::Jump(float df)
 	//{ CurFrame -= 7; Status = waiting; State = standing; }
 
 }
+void Character::Jump()
+{
+	int aa = 610;
+	int bb = 1590;
+	int cc = -5;
+	
 
+	int v[7] = { 0,110,205,305,410,513,610 };
+	//	int y[3] = { 1590,1590,1590,1590,1590 };
+	//int c[3] = { -5,-5,-5,-5,-5 };*/
+	int h[7] = { -25,-15,-15,-25,-25,-25,-25 };
+
+	int y = 1590;
+	float jump_height;
+	if (Status == short_jump) jump_height = short_jump_dy;
+	else jump_height = long_jump_dy;
+	herosprite.setTextureRect(sf::IntRect(v[int(CurFrame)], y, 100, 110));
+	//	int h = -25;
+
+	if (dir)
+	{
+		herosprite.setScale(1, 1);
+		herosprite.setOrigin(cc - 0, h[int(CurFrame)] + 5 + 0 * 35);
+	}
+	else
+	{
+		herosprite.setScale(-1, 1);
+		herosprite.setOrigin(cc + 120 +20, h[int(CurFrame)] + 5 + 0 * 35);
+	}
+	//CurFrame += 0.0006*time;
+	//CurFrame += df*time;
+	 CurFrame = (jump_height + dy)/(2* jump_height /7+0.03);
+	//if (dy < 0.05 && dy>-0,05) CurFrame = 3;
+	// cout << endl << "Dy=" << dy << "  " << jump_height << "  " << CurFrame;
+	 if (CurFrame > 7) { Status = falling; Falling(); cout << "Falling"; }
+	//{ CurFrame -= 7; Status = waiting; State = standing; }
+
+}
 
 void Character::UpdateHero()
 {
@@ -540,15 +609,18 @@ void Character::UpdateHero()
 		// if ((State== inair)&&(Previous!=jump)) { Previous=jump; }
 		 Previous = jump;
 		 break;
-	 case long_jump:Jump(0.008f);
+	 case long_jump:Jump();//Jump(0.008f);
 		 break;
-	 case short_jump: Jump(0.010f);
+	 case short_jump:Jump();//Short_Jump(); //Jump(0.010f);
 		 break;
 	 //case balancing: {Balancing();  Previous = balancing;
 		// cout << "balancing"; };
 		//			 break;
-	 case falling: {Falling(); } break;
-	 case test: {Balancing();
+	 case falling: {Falling(); } 
+		 break;
+	 case balancing: {dx = 0; Balancing();}
+				break;
+	 case test: {dx = 0; dy = 0; Climbing_end();// Climbing();
 		 cout << "Test"; }
 		 break;
 
@@ -612,7 +684,6 @@ bool Character::InteractionWithMapX(float delta)
 	//int j_1 = int((V.y/* + S.y */+ height / 2 /*- general_data.window.getSize().y / 2*/) / sizeMapY);
 	//int j_2 = int((V.y /*+ S.y*/ + height /*- general_data.window.getSize().y / 2*/) / sizeMapY);
 	
-	
 	if (map.TileMap[j][i] == '0' || map.TileMap[j_1][i] == '0'/* || map.TileMap[j_2][i] == '0'*/)//если наш квадратик соответствует символу 0 (стена), то проверяем "направление скорости" персонажа:
 	{
 		cout << "BLOCK 0";
@@ -627,7 +698,7 @@ bool Character::InteractionWithMapX(float delta)
 		map.left_wall.find(map.TileMap[j_1][i_l]) != map.left_wall.end() ||
 		map.left_wall.find(map.TileMap[j_2][i_l]) != map.left_wall.end())
 	{
-		cout << "if" << map.TileMap[j_2][i_l] << "      " << (V.y + S.y + height - general_data.window.getSize().y / 2) << ">>" <<( (j_2+1)* 60 + 30);
+	/*	cout << "if" << map.TileMap[j_2][i_l] << "      " << (V.y + S.y + height - general_data.window.getSize().y / 2) << ">>" <<( (j_2+1)* 60 + 30);*/
 	//	cout << "BLOCK WALL1" << map.TileMap[j_2][i];
 		//	if (((V.x ))<( (i_l ) * 60+120)) {
 		//		map_s.setTextureRect(sf::IntRect(190, 450, 60, 60));
@@ -638,7 +709,7 @@ bool Character::InteractionWithMapX(float delta)
 		{
 		//	cout << "delta"<< map.TileMap[j_2][i_l]<< map.TileMap[j_1][i_l]<< map.TileMap[j][i_l];
 			if (map.TileMap[j_2][i_l] == '2'|| map.TileMap[j_1][i_l] == '2'|| map.TileMap[j][i_l] == '2')
-			{
+			{	
 				if ((V.y + S.y + height - general_data.window.getSize().y / 2) > ((j_2 + 1) * 60 + 30))
 				{
 					return false;
@@ -702,7 +773,7 @@ bool Character::InteractionWithMapX(float delta)
 
 			if (map.TileMap[j_2][i_r] == '7' || map.TileMap[j_1][i_r] == '7' || map.TileMap[j][i_r] == '7')
 			{
-				cout << "dddd" << (V.x + S.x + width / 2 - general_data.window.getSize().x / 2) << '<' << ((i_r)* 60 -30);
+			//	cout << "dddd" << (V.x + S.x + width / 2 - general_data.window.getSize().x / 2) << '<' << ((i_r)* 60 -30);
 				if ((V.x + S.x+ width / 2 - general_data.window.getSize().x / 2) > ((i_r)* 60 - 30))
 					return false;
 			}
@@ -768,7 +839,7 @@ bool Character::InteractionWithMapX_new(float delta)
 		if (delta < 0)
 			if ((V.x + S.x/*+ width / 2*/ - general_data.window.getSize().x / 2) < ((i)* 60 + 30))
 			{
-				cout << "LEFT V=" << (V.x + delta + S.x - general_data.window.getSize().x / 2) << "<" << (i)* 60 + 30;
+			//	cout << "LEFT V=" << (V.x + delta + S.x - general_data.window.getSize().x / 2) << "<" << (i)* 60 + 30;
 				//cout << "BLOCK WALL";
 				if ((map.TileMap[j_2][i] == '5') && ((V.y + S.y + height - general_data.window.getSize().y / 2) > ((j_2)* 60 + 30))) return true;
 				else	return false;
@@ -781,7 +852,7 @@ bool Character::InteractionWithMapX_new(float delta)
 		map.right_wall.find(map.TileMap[j_1][i_r]) != map.right_wall.end() ||
 		map.right_wall.find(map.TileMap[j_2][i_r]) != map.right_wall.end())
 	{
-		cout << "WALL";
+		//cout << "WALL";
 		if (delta > 0)
 		{
 			if ((V.x + delta + width + S.x - general_data.window.getSize().x / 2) > ((i_r)* 60 + 30))
@@ -808,14 +879,16 @@ bool Character::InteractionWithMapY(float deltaY)
 	int	i_1 = int((V.x + (dir ? 33 : 45)) / sizeMapX);
 	int	i_2 = int((V.x + (dir ? 33 : 45) + 45) / sizeMapX);
 	int j_current = int((V.y +height/ 2) / sizeMapY);
+//	cout<<"map" << map.TileMap[j_next][i_1] << "  " << map.TileMap[j_next][i_1] << endl;
 //	cout << "  jcur "<< (dir ? 33 : 45);
-	cout <<"  "<< map.TileMap[j_next][i_1] << "    " << map.TileMap[j_next][i_2];
+//	cout <<"ЕШДУ  X"<< map.TileMap[j_next][i_1] <<"Y" <<map.TileMap[j_next][i_2]<< map.TileMap[j_next][i_1] << "    " << map.TileMap[j_next][i_2];
 	
 //	cout << " jnext=" << j_next << "." << ((map.TileMap[j_next][i_1] == ' ') ? ' ' : (map.TileMap[j_next][i_1] - 48)) << "." <<
 //		((map.TileMap[j_next][i_2] == ' ') ? ' ' : (map.TileMap[j_next][i_2] - 48)) << "." << " jcur=" << j_current << endl;
-//	cout << "X=" << V.x << "  V.X" << (i_1)*sizeMapX;
+//	cout << "X=" << V.x << "  V.X" << (i_1)*sizeMapX << " s=" << map.TileMap[j_next][i_1] << "  " << map.TileMap[j_next][i_2]<< endl;
 	if (map.TileMap[j_next][i_1] == map.TileMap[j_next][i_2])
 	{
+
 		if (map.TileMap[j_next][i_1] == ' ')	return true;
 		//	(TileMap[j_current][i_1] == ' ' && TileMap[j_current][i_2] == ' ')&&(V.y>(j+1)*sizeMapY))
 
@@ -856,6 +929,20 @@ bool Character::InteractionWithMapY(float deltaY)
 	{
 		if (V.y  < ((j_next)* 60 + 30)) return true;
 	}
+
+	if ((map.TileMap[j_next][i_1] == '3' && map.TileMap[j_next][i_2] == '4')
+		|| (map.TileMap[j_next][i_1] == '4' && map.TileMap[j_next][i_2] == '3'))
+	{
+		if (V.y  < ((j_next)* 60 + 30)) return true;
+	}
+
+	if ((map.TileMap[j_next][i_1] == '2' && map.TileMap[j_next][i_2] == '4'))
+	{
+		//if (V.y  < ((j_next)* 60 + 30)) return true;
+		if ((V.x >((i_1)*sizeMapX)) && (V.y  < ((j_next)* 60 + 30))) return true;
+	}
+
+
 	if ((map.TileMap[j_next][i_1] == '5' && map.TileMap[j_next][i_2] == '5'))
 	{
 	//	cout << "DELTE" << (V.x - i_1 * 60);
@@ -881,38 +968,42 @@ bool Character::InteractionWithMapY(float deltaY)
 		if ((V.x > ((i_1)*sizeMapX) ) && (V.y  < ((j_next)* 60 + 30)))	return true;
 		///	if ((V.x > ((i_1)*sizeMapX) - 10) && (V.y  < ((j_next)* 60 + 30)))	return true;
 	}
-
+	int r =- 20;
 
 	if ((map.TileMap[j_next][i_1] == '3' && map.TileMap[j_next][i_2] == '8'))
 	{
-		cout << "rano2";
+//		cout << "rano2";
 //		cout << "DELTE" << (V.x - i_1 * 60) << " V.Y=" << (V.y + height);
-	//	if ((V.x < ((i_2)*sizeMapX - 30)))  return true;
-			
-		cout <<"  "<<V.y << "  "<< (j_next)* 60 + 30;
-		getchar();
+		if ((V.x < ((i_2)*sizeMapX - 30+r)))  
+
 		if (V.y < ((j_next)* 60 + 30)) return true;
 		//if ((V.x < ((i_2)*sizeMapX) + 10) && (V.y  < ((j_next)* 60 + 30)))	
 	}
 	if ((map.TileMap[j_next][i_1] == ' ' && map.TileMap[j_next][i_2] == '8')
 		)
 	{
-		cout << "rano1";
-		if (V.x <((i_2)*sizeMapX + 30)) 	return true;
+	//	cout << "rano1";
+		if (V.x <((i_2)*sizeMapX + 30+r)) 	return true;
 		if (V.y  < ((j_next)* 60 + 30)) return true;
 	}
 	if ((map.TileMap[j_next][i_1] == ' ' && map.TileMap[j_next][i_2] == '6')
 		)
 	{
-		if (V.x <((i_2)*sizeMapX + 30)) 	return true;
+		if (V.x <((i_2)*sizeMapX + 30+r)) 	return true;
+		if (V.y  < ((j_next)* 60 + 30)) return true;
+	}
+	if ((map.TileMap[j_next][i_1] == '6' && i_1==i_2)
+		)
+	{
+		cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+		if (V.x <((i_2)*sizeMapX + 30 + r)) 	return true;
 		if (V.y  < ((j_next)* 60 + 30)) return true;
 	}
 
-
-	if ((map.TileMap[j_next][i_1] == '6' && map.TileMap[j_next][i_2] == '6')
+	if ((map.TileMap[j_next][i_1] == '6' && map.TileMap[j_next][i_2] == '6'&&i_1!=i_2)
 		)
 	{
-		if (V.x >((i_1)*sizeMapX + 30)&& (V.x <((i_2)*sizeMapX + 30))) 	return true;
+		if (V.x >((i_1)*sizeMapX + 30+r)&& (V.x <((i_2)*sizeMapX + 30+r))) 	return true;
 		if (V.y  < ((j_next)* 60 + 30)) return true;
 	}
 	
@@ -920,30 +1011,76 @@ bool Character::InteractionWithMapY(float deltaY)
 	if ((map.TileMap[j_next][i_1] == '6' && map.TileMap[j_next][i_2] == '3')
 		)
 	{
-		if (V.x <((i_2)*sizeMapX + 30)) 	return true;
+		if (V.x <((i_1)*sizeMapX + 30)) 	return true;
 		if (V.y  < ((j_next)* 60 + 30)) return true;
 	}
 	
 
-	if ((map.TileMap[j_next][i_2] == '7' && map.TileMap[j_next][i_1] == ' '))
-	{
-		if (V.x <((i_2)*sizeMapX )) 	return true;
-		//	if (V.x <((i_2)*sizeMapX + 10)) 	return true;
-	}
+	//if ((map.TileMap[j_next][i_2] == '7' && map.TileMap[j_next][i_1] == ' '))
+	//{
+	//	if (V.x <((i_2)*sizeMapX+0+1*30+1*r )) 	return true;
+	//	//	if (V.x <((i_2)*sizeMapX + 10)) 	return true;
+	//}
 	////6 8  /////
 	if ((map.TileMap[j_next][i_1] == '6' && map.TileMap[j_next][i_2] == '8'))
 	{
-		cout << "rano";
+	//	cout << "rano";
 
-		if (V.x <((i_2)*sizeMapX + 30)) 	return true;
+		if (V.x <((i_2)*sizeMapX + 30+r)) 	return true;
 		if (V.y  < ((j_next)* 60 + 30)) return true;
 	}
 
 
 
 	//cout << " JNEX=" << (j_next * 60) << "V.Y=" << V.y<<endl;
+//	cout << "FALSE";
 	return false;
 }
+
+bool Character::InteractionWithMapY_new(float deltaY)
+{
+	sf::Vector2f V = general_data.Get_Screen_Pos();
+
+	//InteractionWithMapX(  float delta)
+	float width = herosprite.getTextureRect().width;
+	float height = 110;// herosprite.getTextureRect().height;
+	sf::Vector2f S = herosprite.getPosition();
+	//	S	
+	//y + deltaY + herosprite.getPosition().y - general_data.window.getSize().y / 2);
+	int i_l = int((V.x + S.x - general_data.window.getSize().x / 2) / sizeMapX);
+	int	i = int((V.x + S.x /*- herosprite.getOrigin().x*/  - general_data.window.getSize().x / 2) / sizeMapX);
+	int	i_r = int((V.x + S.x /*- herosprite.getOrigin().x*/ + width- general_data.window.getSize().x / 2) / sizeMapX);
+	int	j = int((V.y + S.y+deltaY - general_data.window.getSize().y / 2) / sizeMapY);
+	int j_1 = int((V.y + S.y+deltaY + height / 2 - general_data.window.getSize().y / 2) / sizeMapY);
+	int j_2 = int((V.y + S.y+deltaY + height - general_data.window.getSize().y / 2) / sizeMapY);
+
+
+	if (map.TileMap[j_1][i_l] == '3'  || map.TileMap[j_1][i_r]=='3')
+	{	
+	//	cout << "sss "<<V.y+S.y+height- general_data.window.getSize().y/2<<"   "<<j_2*60+0;
+		if (V.y + S.y + height - general_data.window.getSize().y / 2>j_2 * 60 + 0) return false;
+	}
+
+	if (map.TileMap[j_1][i_l] == '2' || map.TileMap[j_1][i_r] == '2')
+	{
+	//	cout << "sss " << V.y + S.y + height - general_data.window.getSize().y / 2 << "   " << j_2 * 60 + 0;
+		if (V.y + S.y + height - general_data.window.getSize().y / 2>j_2 * 60 + 0) return false;
+	}
+	if (map.TileMap[j_1][i_l] == '8' || map.TileMap[j_1][i_r] == '8')
+	{
+//		cout << "sss " << V.y + S.y + height - general_data.window.getSize().y / 2 << "   " << j_2 * 60 + 0;
+		if (V.y + S.y + height - general_data.window.getSize().y / 2>j_2 * 60 + 0) return false;
+	}
+	if (map.TileMap[j_1][i_l] == '6' || map.TileMap[j_1][i_r] == '6')
+	{
+//		cout << "sss " << V.y + S.y + height - general_data.window.getSize().y / 2 << "   " << j_2 * 60 + 0;
+		if (V.y + S.y + height - general_data.window.getSize().y / 2>j_2 * 60 + 0) return false;
+	}
+
+	return true;
+}
+
+
 
 bool Character::InteractionWithMapY_old(float deltaY)
 {
@@ -971,7 +1108,7 @@ bool Character::InteractionWithMapY_old(float deltaY)
 		if ((map.TileMap[j_next][i_1] == '5') && (V.x > ((i_1)*sizeMapX + 30))) return true;
 
 	}
-	cout << "rano3";
+//	cout << "rano3";
 	if
 		(((map.TileMap[j_next][i_1] == '5' || map.TileMap[j_next][i_1] == '1') && map.TileMap[j_next][i_2] == ' ') ||
 			(map.TileMap[j_next][i_1] == ' ' && (map.TileMap[j_next][i_2] == '5' || map.TileMap[j_next][i_2] == '1'))
@@ -990,7 +1127,7 @@ bool Character::InteractionWithMapY_old(float deltaY)
 	{
 		return true;
 	}
-	cout << "rano2";
+//	cout << "rano2";
 	if ((map.TileMap[j_next][i_1] == '3' && map.TileMap[j_next][i_2] == ' '))
 	{
 		if (V.y  < ((j_next)* 60 + 30)) return true;
@@ -1089,6 +1226,13 @@ bool Character::InteractionWithMapY_old(float deltaY)
 	return false;
 }
 
+
+void Character::Move_in_air()
+{
+	cout << "MOVE IN AIR";
+}
+
+
 void Character::Edge()
 {
 	sf::Vector2f V = sf::Vector2f(general_data.Get_Screen_Pos().x  + herosprite.getPosition().x - general_data.window.getSize().x / 2,
@@ -1104,15 +1248,16 @@ void Character::Edge()
 	int j_current = int((V.y + height / 2) / sizeMapY);
 	
 
-	cout << "DDD=" << (V.x + (dir ? 33 : 45) + 45) << "  "
-		<< map.TileMap[j_next][i_1] << " " << map.TileMap[j_next][i_2] <<" ";
-	cout << "   VV= " << i_1 << "  " << i_2;
+//cout << "DDD=" << (V.x + (dir ? 33 : 45) + 45) << "  "
+	//	<< map.TileMap[j_next][i_1] << " " << map.TileMap[j_next][i_2] <<" ";
+//	cout << "   VV= " << i_1 << "  " << i_2;
 
 	if ((map.TileMap[j_next][i_1] == '5' && map.TileMap[j_next][i_2] == '5'))
 	{
 		if ((V.x + (dir ? 33 : 45) + 45) > ((i_2)* sizeMapX + 15))
 		{
 			result = 1;// general_data.Set_Screen_Pos(i_2*sizeMapX-herosprite.getPosition().x+general_data.window.getSize().x/2, general_data.Get_Screen_Pos().y);
+		//	cout << "5 5";
 		}
 	}
 
@@ -1121,6 +1266,7 @@ void Character::Edge()
 		if ((V.x + (dir ? 33 : 45) + 45) >((i_1)*sizeMapX + 15)) 
 		{
 			result = 1;// general_data.Set_Screen_Pos(i_1*sizeMapX - herosprite.getPosition().x + general_data.window.getSize().x / 2, general_data.Get_Screen_Pos().y);
+	//		cout << "5 _ ";
 		}
 	}
 
@@ -1129,21 +1275,158 @@ void Character::Edge()
 		if ((V.x + (dir ? 33 : 45) + 45) > ((i_2)*sizeMapX + 15)) 
 		{
 			result = 1;// general_data.Set_Screen_Pos(i_2*sizeMapX - herosprite.getPosition().x + general_data.window.getSize().x / 2, general_data.Get_Screen_Pos().y);
+			
+
+		}
+	}
+
+	//if ((map.TileMap[j_next][i_1] == '4'|| map.TileMap[j_next][i_1] == '5')&&
+	//	(map.TileMap[j_next][i_2] == '5' || map.TileMap[j_next][i_2] == ' '))
+	//	if ((V.x + (dir ? 33 : 45) + 45) > ((i_2)*sizeMapX + 15))
+	//	{
+	//		result = 1;// general_data.Set_Screen_Pos(i_2*sizeMapX - herosprite.getPosition().x + general_data.window.getSize().x / 2, general_data.Get_Screen_Pos().y);
+
+
+	//	}
+
+
+	/////////////////////////////right 
+
+	//cout <<" s=" <<map.TileMap[j_next][i_1] <<"  "<< map.TileMap[j_next][i_2]<<" "<< (V.x + (dir ? 33 : 45) )<<" "<< (i_1)* sizeMapX +15 <<endl;
+	if ((map.TileMap[j_next][i_1] == '6' && map.TileMap[j_next][i_2] == '6'))
+	{
+		if ((V.x + (dir ? 33 : 45) ) < ((i_2)* sizeMapX+15 ))
+		{
+			result = 2;// general_data.Set_Screen_Pos(i_2*sizeMapX-herosprite.getPosition().x+general_data.window.getSize().x/2, general_data.Get_Screen_Pos().y);
+					   //	cout << "5 5";
+		}
+	}
+
+	if ((map.TileMap[j_next][i_1] == ' ' && map.TileMap[j_next][i_2] == '6'))
+	{
+		if ((V.x + (dir ? 33 : 45)) < ((i_2)* sizeMapX + 15))
+		{
+			result = 2;// general_data.Set_Screen_Pos(i_2*sizeMapX-herosprite.getPosition().x+general_data.window.getSize().x/2, general_data.Get_Screen_Pos().y);
+					   //	cout << "5 5";
 		}
 	}
 
 
 
-	if (result>0)// Status = balancing;
 
-	switch (result)
+
+
+	if (result > 0)// Status = balancing;
 	{
-	case 1:  SetDir(1); cout << "balance";
-		break;
+		int x, y;
+	
+		switch (result)
+		{
 
-	default:
-		break;
+		case 1:
+			 x = (i_2)* 60;
+			 y = 30;
+			general_data.Increm_Screen_Pos(x - V.x - y, 0);
+			SetDir(1); Status = balancing; /*cout << "balance";*/
+			break;
+
+		case 2:
+			x = (i_2-1)* 60;
+			y =-10;
+			general_data.Increm_Screen_Pos(x - V.x - y, 0);
+			SetDir(false); Status = balancing;/* getchar(); *//*cout << "balance";*/
+			break;
+
+		default:
+			break;
+		}
 	}
+}
 
 
+void Character::Climbing()
+{
+	//int v[8] = { 0, 112 ,216,330,451,554,661,771 };
+	//int y[8] = { 155,154,154 ,154,154,153,153,153 };
+
+
+
+	const int length = 6;
+	int v[length] = {0,85,158,236,313,386};
+	//	int y[3] = { 1590,1590,1590,1590,1590 };
+	//int c[3] = { -5,-5,-5,-5,-5 };*/
+	int h[length] = { -5,0,15,18,18,28 };
+	int delta_y[length] = { 20,20,5,5,5,5 };
+	int cc[length] = { 0,-13,-10,-15,-27,-25 };
+	int y = 2170;
+	int delta_h[length] = { 0,0,20,18,20,20 };
+	int width[length] = { 90,82,82,82,78,78 };
+	herosprite.setTextureRect(sf::IntRect(v[int(CurFrame)], y+delta_y[int(CurFrame)], width[int(CurFrame)], 120+delta_h[int(CurFrame)]));
+
+	//	int h = -25;
+
+	if (dir)
+	{
+
+		herosprite.setScale(1, 1);
+		herosprite.setOrigin(cc[int(CurFrame)] - 0 , h[int(CurFrame)] + 5 + 0 * 35);
+	}
+	else
+	{
+		herosprite.setScale(-1, 1);
+		herosprite.setOrigin(cc[int(CurFrame)] + 120, h[int(CurFrame)] + 5 + 0 * 35);
+	}
+	if (int(CurFrame)<length) CurFrame += 0.006*time;
+	else
+	{
+		CurFrame = 0;
+		general_data.Increm_Screen_Pos(0, -70);
+		cout << "dir1" << dir;
+		dir = !dir;
+		cout << "dir" << dir;
+
+	}
+	//CurFrame += 0.007*time;
+	
+
+	//{ CurFrame -= 7; Status = waiting; State = standing; }
+
+}
+
+void Character::Climbing_end()
+{
+
+	//	int y[3] = { 1590,1590,1590,1590,1590 };
+	//int c[3] = { -5,-5,-5,-5,-5 };*/
+
+	const int length = 7;
+	int v[length] = { 386,0,90,165,235,320,390 };
+	//	int y[3] = { 1590,1590,1590,1590,1590 };
+	//int c[3] = { -5,-5,-5,-5,-5 };*/
+	int h[length] = { 28,20,33,41,58,67,85 };
+	int delta_y[length] = { 5,145,145,145,145,145,145 };
+	int cc[length] = { -25,-14,-20,-20,-17,-23,-15 };
+	int y = 2170;
+	int delta_h[length] = { 20,0,0 ,0,0,0,0};
+	int width[length] = { 78,90,85,80,80,80,80 };
+	herosprite.setTextureRect(sf::IntRect(v[int(CurFrame)], y + delta_y[int(CurFrame)], width[int(CurFrame)], 120 + delta_h[int(CurFrame)]));
+
+	//	int h = -25;
+
+	if (dir)
+	{
+
+		herosprite.setScale(1, 1);
+		herosprite.setOrigin(cc[int(CurFrame)] - 0, h[int(CurFrame)] + 5 + 0 * 35);
+	}
+	else
+	{
+		herosprite.setScale(-1, 1);
+		herosprite.setOrigin(cc[int(CurFrame)] + 120, h[int(CurFrame)] + 5 + 0 * 35);
+	}
+	if (int(CurFrame)<length) CurFrame += 0.0006*time;
+	else
+	{
+		CurFrame = 0;
+	}
 }

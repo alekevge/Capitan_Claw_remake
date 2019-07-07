@@ -1,8 +1,7 @@
-
 #include "Map.h"
 
 using namespace std;
-int MapWidth = 100;
+int MapWidth = 54;
 sf::Sprite map_s;
 sf::Texture map_t;
 extern const float sizeMapX = 60.;
@@ -12,40 +11,40 @@ set<char> left_wall = { '1','2','5' };
 set<char> ground = { '2','3','6' };
 set<char> right_wall = { '6','7','8' };
 set<char>::iterator it;
-sf::RenderTexture map_texture;
 
-string TileMap[MapHeight] = {
+
+//string TileMap[MapHeight] = {
 //	 1234567890123456789012345678901234567890
-	"0                                      0",
-	"01                                     0",
-	"01                                     0",
-	"0000000000000000000000000000000000000000",
-	"01                                     0",
-	"01                                     0",
-	"01                                     0",
-	"01                                     0",
-	"01                                     0",
-	"01                                     0",
-	"01                            6333333330",
-	"01                 000        7000000000",
-	"02333333333345          6333338000000000",
-	"00000000000001        638000000000000000",
-	"000000000000013345   6800000000000000000",
-	"0000000000000000023338000000000000000000",
-	"0                00000                 0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",	
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0000000000000000000000000000000000000000",
-};
+//	"0                                      0",
+//	"01                                     0",
+//	"01                                     0",
+//	"0000000000000000000000000000000000000000",
+//	"01                                     0",
+//	"01                                     0",
+//	"01                                     0",
+//	"01                                     0",
+//	"01                                     0",
+//	"01                                     0",
+//	"01                            6333333330",
+//	"01                 000        7000000000",
+//	"02333333333345          6333338000000000",
+//	"00000000000001        638000000000000000",
+//	"000000000000013345   6800000000000000000",
+//	"0000000000000000023338000000000000000000",
+//	"0                00000                 0",
+//	"0                                      0",
+//	"0                                      0",
+//	"0                                      0",	
+//	"0                                      0",
+//	"0                                      0",
+//	"0                                      0",
+//	"0                                      0",
+//	"0000000000000000000000000000000000000000",
+//};
 
 
 Map::Map(sf::RenderTexture& bg_texture,sf::RenderWindow& Wi, General_Data& dat) :
-		 background_texture(bg_texture), window(Wi), data(dat)
+		 background_texture(bg_texture), window(Wi), data(dat),stair(900,870,4,bg_texture, map_t,dat)
 {
 	
 	
@@ -54,7 +53,7 @@ Map::Map(sf::RenderTexture& bg_texture,sf::RenderWindow& Wi, General_Data& dat) 
 	map_s.setTexture(map_t);
 	map_texture.create(V_s.x, V_s.y);
 //	cout << "jj=" << Pl.pos.x << "c " << Pl.pos.y;
-	
+//	Up_Stair stair;
 		last_map_pos[0] = int(data.Get_Screen_Pos().x) % 60;
 		last_map_pos[1] = int(data.Get_Screen_Pos().y) % 60;
 	DrawMap();
@@ -63,9 +62,20 @@ Map::Map(sf::RenderTexture& bg_texture,sf::RenderWindow& Wi, General_Data& dat) 
 
 };
 
+void Map::Draw_Elements()
+{
+	stair.Draw();
+	
+}
+
+bool Map::Check_()
+{}
+
 void Map::DrawMap()
 {
 	
+	background_texture.display();
+
 	//
 	map_texture.clear();
 //	sf::Vector2f V_c = Player.pos;
@@ -76,13 +86,13 @@ void Map::DrawMap()
 
 	//	sf::Vector2f V_c = camera.getCenter();
 	sf::Vector2f V_s = camera.getSize();
-
+	//background_texture.display();
 	background_texture.clear();
 	int i_0 = int((V_c.x - 0.5*V_s.x) / sizeMapX);
 	int i_l = int((V_c.x + 0.5*V_s.x) / sizeMapX);
 	int j_0 = int((V_c.y - 0.5*V_s.y) / sizeMapY);
 	int j_l = int((V_c.y + 0.5*V_s.y) / sizeMapY);
-	
+//	cout << "Map" << MapHeight << "  " << MapWidth;
 	for (int i = i_0; i <= i_l; ++i)
 		for (int j = j_0; j <= j_l; ++j)
 		{
@@ -99,9 +109,13 @@ void Map::DrawMap()
 				case '6': map_s.setTextureRect(sf::IntRect(60, 200, 80, 60)); map_s.setOrigin(9, -13); break;
 				case '7': map_s.setTextureRect(sf::IntRect(60, 65, 70, 60)); map_s.setOrigin(9, 0); break;
 				case '8': map_s.setTextureRect(sf::IntRect(60, 130, 70, 60)); map_s.setOrigin(9, 0); break;
-				default:  map_s.setTextureRect(sf::IntRect(600, 0, 60, 60));  map_s.setOrigin(0, 0); break;
+				case ' ':  map_s.setTextureRect(sf::IntRect(600, 0, 60, 60));  map_s.setOrigin(0, 0); break;
+				case 'r':  map_s.setTextureRect(sf::IntRect(325, 0, 66, 60));  map_s.setOrigin(-6, 0); break;
+				case 't':  map_s.setTextureRect(sf::IntRect(325, 65, 66, 60));  map_s.setOrigin(-6, 0); break;
+				case 's':  map_s.setTextureRect(sf::IntRect(325, 130,66, 40));  map_s.setOrigin(-6, 0); break;
+
+				default:  map_s.setTextureRect(sf::IntRect(0, 0, 60, 60));  map_s.setOrigin(0, 0); break;
 				}
-				//		cout << i <<j<< endl;
 				map_s.setPosition((i - i_0) * 60, (j - j_0) * 60);
 				background_texture.draw(map_s);
 
@@ -115,19 +129,14 @@ void Map::DrawMap()
 	//	map_s.setPosition(0, 0);
 
 	//	cout <<"" << endl;
-	background_texture.draw(map_s);
+	//background_texture.draw(map_s);
+
+	Draw_Elements();
 	background_texture.display();
 	last_map_pos[0] = int(V_c.x) % 60;
 	last_map_pos[1] = int(V_c.y) % 60;
 };
 
-void Map::DisplayMap()
-{
-	map_s.setTextureRect(sf::IntRect(130, 65, 60, 60));
-	map_texture.draw(map_s);
-	map_texture.display();
-
-}
 
 bool Map::IsMapChanged()
 {//оптимизация - когда стоишь не перерисовывается экран

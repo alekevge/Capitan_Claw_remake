@@ -5,12 +5,12 @@
 #include "Camera.h"
 #include "General_Data.h"
 #include "Map.h"
-//#include "Map.h"
+
 const float SizeX = 600, SizeY = 400;
 
 enum state { inair, crouch, standing };
 enum status {null,waiting,endaction,run,pistolattack,meleeattack,jump,
-	falling,test,balancing,long_jump,short_jump};
+	falling,test,balancing,long_jump,short_jump,stop_falling,climb};
 class Character
 {
 	float  dy, gravity;
@@ -30,7 +30,14 @@ class Character
 	void  Run();
 	void  Balancing();
 	void  Falling();
-	void   Edge();
+	void  Edge();
+	void  Jump();
+	void  Climbing();
+	void  Climbing_end();
+	void  Stop_Falling();
+	//const float short_jump_dy = 0.47;
+	const float short_jump_dy = 0.53;
+	const float long_jump_dy = 0.70;
 
 	public:
 		bool action = false;
@@ -54,10 +61,12 @@ public:
 	void SetDir(bool d)	{dir = d;};
 	bool GetDir()	{return dir;};
 	void InteractionWithMap();
+	void Move_in_air();
 	bool IsUpdate ();
 	bool InteractionWithMapX(float delta);
 	bool InteractionWithMapX_new(float delta);
 	bool InteractionWithMapY(float deltaY);
+	bool InteractionWithMapY_new(float deltaY);
 	bool InteractionWithMapY_old(float deltaY);
 
 };

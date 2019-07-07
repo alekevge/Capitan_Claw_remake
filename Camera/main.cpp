@@ -59,20 +59,107 @@ int main()
 		}
 
 		//DrawMap(background_texture, Player_pos);
-		cout << endl;
+		//cout << endl;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+
+			if (!Player.jumped)
+			{
+				cout << "Jump";
+				Player.firstpress = gl_clock.getElapsedTime().asMicroseconds();
+				Player.jumped = true;
+			}
+			else if (Player.State != inair)
+
+			{
+				if ((gl_clock.getElapsedTime().asMicroseconds() - Player.firstpress > 600000))
+				{
+					Player.ResetFrame();
+					cout << "Long _ Jump";
+					Player.Jump(false);
+					Player.State = inair;
+					Player.jumped = false;
+					Player.Status = long_jump;
+					Player.firstpress = gl_clock.getElapsedTime().asMicroseconds();
+
+				}
+
+
+			}
+
+		}
+		else if (Player.State != inair)
+		{
+
+			if (Player.jumped && ((gl_clock.getElapsedTime().asMicroseconds() - Player.firstpress > 450000)))
+			{
+				Player.ResetFrame();
+				cout << "Long _ Jump";
+				Player.Jump(false);
+				Player.State = inair;
+				Player.Status = long_jump;
+				Player.jumped = false;
+
+			}
+			if (Player.jumped && (gl_clock.getElapsedTime().asMicroseconds() - Player.firstpress < 350000))
+			{
+				Player.ResetFrame();
+				cout << "Short _ Jump";
+				Player.GetDir() ? Player.dx = Player.speed : Player.dx = -Player.speed;
+				Player.Jump(true);
+				Player.State = inair;
+				Player.Status = short_jump;
+				Player.jumped = false;
+
+			}
+
+			//			Player.jumped = false;
+		}
+
+
+
+
+
 
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			 && (Player.State != inair))
+		)
 			{
-			
-		//		if (Player.GetDir())   Player.SetDir(0); else 
-		//		if (Player.State == standing)	Player.Status = run;
-				if (Player.Previous != run&&Player.Status == run)  Player.Previous = run;
-				if (Player.GetDir())  Player.SetDir(0); else if (Player.Status != jump) {
-					Player.Status = run;
-		
+				if (Player.State != inair)
+				{
+					cout << endl << "DD=" << Player.Status;
+					if (Player.Status == balancing) /*cout << endl << Player.GetDir();*/
+					{
+
+						if (Player.GetDir() == 0)
+						{
+							Player.SetDir(false);
+							general_data.Increm_Screen_Pos(-40, 0);
+							Player.Status = run;
+						}
+						else
+						{
+							Player.State = inair;
+							Player.Status = falling;
+						//	Player.dy = 1.3;
+							general_data.Increm_Screen_Pos(-50, 0);
+						}
+					}
+					
+					//		if (Player.GetDir())   Player.SetDir(0); else 
+					//		if (Player.State == standing)	Player.Status = run;
+					if (Player.Previous != run&&Player.Status == run)  Player.Previous = run;
+					if (Player.GetDir())  Player.SetDir(0); 
+					else if (Player.Status != jump) {
+						Player.Status = run;
+
+					}
+
+
 				}
-				if (Player.Status == balancing) Player.Status = run;
+				else if (Player.State == inair && Player.GetDir() == 1) Player.SetDir(1);
+				else Player.Move_in_air();
+
+
 			}
 			else
 			{   //отжатие клавищи  - перестаёт бежать когда отпускаешь
@@ -81,24 +168,44 @@ int main()
 					Player.Status = waiting;
 				
 			}
-
+	
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-				&&(Player.State!=inair))
+				)
 			{
-				
-		//		if (!Player.GetDir())   Player.SetDir(1); else
-		//		if (Player.State==standing)	Player.Status = run;
-				//else if (!Player.GetDir())   Player.SetDir(1);
-				if (Player.Previous != run&&Player.Status == run) Player.Previous = run;
-				if (!Player.GetDir())  Player.SetDir(1); else if (Player.Status!=jump)	Player.Status = run;
-				if (Player.Status == balancing) Player.Status = run;
+				if (Player.State != inair)
+				{
+					cout << "noot in air" << endl;
+					if (Player.Status == balancing ) 
+						if (Player.GetDir()) 
+						{ 
+							Player.Status = falling; 
+							Player.State = inair;
+							general_data.Increm_Screen_Pos(60,0); 
+						}
+						else
+						{
+							Player.SetDir(false);
+							general_data.Increm_Screen_Pos(40, 0);
+							Player.Status = run;
+						}
+						
+					//		if (!Player.GetDir())   Player.SetDir(1); else
+					//		if (Player.State==standing)	Player.Status = run;
+							//else if (!Player.GetDir())   Player.SetDir(1);
+					if (Player.Previous != run&&Player.Status == run) Player.Previous = run;
+					if (!Player.GetDir())  Player.SetDir(1); 
+					else if (Player.Status != jump)	Player.Status = run;
+					
+				}
+				else if (Player.State == inair && Player.GetDir() != 1) Player.SetDir(0);
+				else Player.Move_in_air();
 			}
 			else
 			{ //отжатие клавищи  - перестаёт бежать когда отпускаешь 
 				if (Player.Previous == run & Player.Status == waiting)  Player.Previous = waiting; 
 				if (Player.Status == run && Player.GetDir()==1)//&& (Player.Status == run
 				Player.Status = waiting;
-			
+	
 			}
 
 
@@ -153,58 +260,7 @@ int main()
 
 
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			{
-
-				if (!Player.jumped)
-				{
-					cout << "Jump";
-					Player.firstpress = gl_clock.getElapsedTime().asMicroseconds();
-					Player.jumped = true;
-				}
-				else if (Player.State != inair)
-
-				{
-					if ((gl_clock.getElapsedTime().asMicroseconds() - Player.firstpress > 600000))
-					{
-						Player.ResetFrame();
-						cout << "Long _ Jump";
-						Player.Jump(false);
-						Player.jumped = false;
-						Player.Status = long_jump;
-						Player.firstpress = gl_clock.getElapsedTime().asMicroseconds();
-				
-					}
-
-
-				}
-
-			}
-			else if (Player.State!=inair)
-			{
-				
-				if (Player.jumped&& ((gl_clock.getElapsedTime().asMicroseconds() - Player.firstpress > 450000)))
-				{
-					Player.ResetFrame();
-					cout << "Long _ Jump";
-					Player.Jump(false);
-					Player.Status = long_jump;	
-					Player.jumped = false;
-
-				}
-				if (Player.jumped && (gl_clock.getElapsedTime().asMicroseconds() - Player.firstpress < 350000))
-				{
-					Player.ResetFrame();
-					cout << "Short _ Jump";
-					Player.GetDir() ? Player.dx = Player.speed : Player.dx =- Player.speed;
-					Player.Jump(true);
-					Player.Status = short_jump;
-					Player.jumped = false;
-
-				}
 			
-	//			Player.jumped = false;
-			}
 
 		/*		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 				{
