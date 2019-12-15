@@ -1,0 +1,15 @@
+﻿  main.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\main.cpp(1): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  Up_Stairs.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\upstairs.h(2): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  Map.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\map.h(2): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  General_Data.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\general_data.h(2): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  Camera.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\camera.h(2): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  AnimationMainHero.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\animationmainhero.h(2): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  Animated_Objects.cpp
+d:\курсы специалист\c++\project\camera_remake\camera\animated_objects.h(2): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory
+  Создание кода...

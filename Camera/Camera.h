@@ -6,4 +6,4 @@ using namespace std;
 extern sf::View camera;
 
 
-//void CameraGoForHero(float x, float y);
+void CameraGoForHero(float x, float y);

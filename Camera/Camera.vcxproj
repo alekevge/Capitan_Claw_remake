@@ -123,6 +123,7 @@
     <ClCompile Include="Animated_Objects.cpp" />
     <ClCompile Include="AnimationMainHero.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Control.cpp" />
     <ClCompile Include="General_Data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -132,10 +133,15 @@
     <ClInclude Include="Animated_Objects.h" />
     <ClInclude Include="AnimationMainHero.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Control.h" />
     <ClInclude Include="General_Data.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="Upstairs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Camera.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
