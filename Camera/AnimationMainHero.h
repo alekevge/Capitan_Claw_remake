@@ -21,6 +21,9 @@ class Character
 	Map& map;
 	float& time;
 	float CurFrame;
+	float sizeMapX;
+	float sizeMapY;
+	int clim = 0;
 	int   MeleeAttackType = -1, last_frame = 0;
 	
 	void  Idle();

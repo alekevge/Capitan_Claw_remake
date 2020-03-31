@@ -1,21 +1,86 @@
 ﻿  main.cpp
 d:\курсы специалист\c++\project\camera_remake\camera\AnimationMainHero.h(17): warning C4305: инициализация: усечение из "double" к "float"
-d:\курсы специалист\c++\project\camera_remake\camera\AnimationMainHero.h(40): warning C4305: инициализация: усечение из "double" к "const float"
-d:\курсы специалист\c++\project\camera_remake\camera\AnimationMainHero.h(41): warning C4305: инициализация: усечение из "double" к "const float"
-main.cpp(50): warning C4305: -=: усечение из "double" к "float"
-main.cpp(54): warning C4305: +=: усечение из "double" к "float"
-main.cpp(65): warning C4305: +=: усечение из "double" к "float"
-main.cpp(75): warning C4305: -=: усечение из "double" к "float"
-main.cpp(85): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-main.cpp(89): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-main.cpp(119): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
-main.cpp(132): warning C4305: инициализация: усечение из "double" к "float"
-main.cpp(181): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
-main.cpp(182): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+d:\курсы специалист\c++\project\camera_remake\camera\AnimationMainHero.h(43): warning C4305: инициализация: усечение из "double" к "const float"
+d:\курсы специалист\c++\project\camera_remake\camera\AnimationMainHero.h(44): warning C4305: инициализация: усечение из "double" к "const float"
+main.cpp(86): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(99): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(149): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(150): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(247): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(248): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(401): warning C4305: -=: усечение из "double" к "float"
+main.cpp(405): warning C4305: +=: усечение из "double" к "float"
+main.cpp(416): warning C4305: +=: усечение из "double" к "float"
+main.cpp(426): warning C4305: -=: усечение из "double" к "float"
+main.cpp(437): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+main.cpp(441): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+main.cpp(521): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(563): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(576): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(606): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(634): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(561): warning C4101: tx: неиспользованная локальная переменная
+main.cpp(561): warning C4101: tz: неиспользованная локальная переменная
+main.cpp(672): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(685): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(699): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(700): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(919): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(932): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(965): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1001): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(969): warning C4390: ";": обнаружен пустой контролируемый оператор; это правильно?
+main.cpp(917): warning C4101: tx: неиспользованная локальная переменная
+main.cpp(917): warning C4101: tz: неиспользованная локальная переменная
+main.cpp(1048): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1061): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(1116): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1117): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(1214): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1215): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1317): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1329): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(1335): warning C4305: аргумент: усечение из "double" к "float"
+main.cpp(1345): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1346): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(1427): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+main.cpp(1465): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1472): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(1496): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1497): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(1463): warning C4101: tx: неиспользованная локальная переменная
+main.cpp(1463): warning C4101: tz: неиспользованная локальная переменная
+main.cpp(1578): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1585): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(1609): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1610): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(1670): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1700): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1703): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1727): warning C4244: аргумент: преобразование "float" в "sf::Int64", возможна потеря данных
+main.cpp(1576): warning C4101: tx: неиспользованная локальная переменная
+main.cpp(1576): warning C4101: tz: неиспользованная локальная переменная
+main.cpp(1764): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1771): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(1796): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(1797): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(1806): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1762): warning C4101: tx: неиспользованная локальная переменная
+main.cpp(1762): warning C4101: tz: неиспользованная локальная переменная
+main.cpp(1907): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(1942): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+main.cpp(2236): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+main.cpp(2275): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
+main.cpp(2282): warning C4305: инициализация: усечение из "double" к "float"
+main.cpp(2355): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+main.cpp(2273): warning C4101: tx: неиспользованная локальная переменная
+main.cpp(2273): warning C4101: tz: неиспользованная локальная переменная
+main.cpp(2470): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(2582): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
   Создание кода
-  1 of 348 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  4 of 1977 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    9 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   Camera.vcxproj -> D:\Курсы Специалист\C++\Project\Camera_remake\Release\Camera.exe
   Camera.vcxproj -> D:\Курсы Специалист\C++\Project\Camera_remake\Release\Camera.pdb (Full PDB)

@@ -3,8 +3,7 @@
 #include "Map.h"
 using namespace std;
 float max_dx = 3, max_dy = 3;
-extern const float sizeMapX;
-extern const float sizeMapY;
+
 Character::Character(bool d, float& t, General_Data& data, Map& map_) :time(t), general_data(data), map(map_)
 
 {
@@ -21,8 +20,9 @@ Character::Character(bool d, float& t, General_Data& data, Map& map_) :time(t), 
 	CurFrame = 0.;
 	herotexture.loadFromFile("Images\\Captain Claw3.png");
 	herosprite.setTexture(herotexture);//передаём в него объект Texture (текстуры)
-
-
+	sizeMapX = map.sizeMapX;
+	sizeMapY = map.sizeMapY;
+	//int clim = 0;
 	x = 200.;
 	y = 470.;
 	herosprite.setPosition(x, y);//з
@@ -1171,7 +1171,8 @@ void Character::Climbing()
 	int v[length] = { 0,85,158,236,313,386 };
 	//	int y[3] = { 1590,1590,1590,1590,1590 };
 	//int c[3] = { -5,-5,-5,-5,-5 };*/
-	int h[length] = { -5,0,15,18,18,28 };
+	//int h[length] = { -5,0,15,18,18,28 };
+	int h[length] = { 0,0,0,0,0,0 };
 	int delta_y[length] = { 20,20,5,5,5,5 };
 	int cc[length] = { 0,-13,-10,-15,-27,-25 };
 	int y = 2170;
@@ -1198,13 +1199,15 @@ void Character::Climbing()
 
 	switch (Status)
 	{
-	case climb_up: if (int(CurFrame + 0.006*time)<length)  CurFrame += 0.006*time;
+	case climb_up: if (int(CurFrame + 0.006*time)<length)
+		CurFrame += 0.006*time;
 				   else {
 					   CurFrame += 0.006*time;
 					   dir = !dir;
 					   CurFrame -= length;
-					   general_data.Increm_Screen_Pos(0, -150);
+					  // general_data.Increm_Screen_Pos(0, -150);
 				   }
+				   general_data.Increm_Screen_Pos(0, -1);
 				   break;
 	case climb_down: if ((CurFrame - 0.006*time) >= 0)
 	{
@@ -1215,7 +1218,13 @@ void Character::Climbing()
 			//general_data.Increm_Screen_Pos(0, 2* (int(8 * CurFrame) -int(8 * (CurFrame - 0.006*time))));
 			int g = herosprite.getOrigin().y;
 			int l = herosprite.getOrigin().x;
+			if (clim != int(50 * CurFrame))
 
+			{
+			//	herosprite.setOrigin(0, 1);
+				general_data.Increm_Screen_Pos(0, 1);
+				clim = int(50 * CurFrame);
+			}
 			//	cout << endl << "1";
 		}
 		CurFrame -= 0.006*time;
@@ -1229,13 +1238,30 @@ void Character::Climbing()
 						 CurFrame -= 0.006*time;
 						 dir = !dir;
 						 CurFrame += 6;
+						 cout << endl << "V";
+					/*	 if (clim != int(1000 * CurFrame))
+
+						 {
+							 herosprite.setOrigin(0, 1);
+							 general_data.Increm_Screen_Pos(0, 1);
+							 clim = int(1000 * CurFrame);
+						 }*/
 						 //	cout <<endl<< "reset";
 						 //	getchar();
-						 //		general_data.Increm_Screen_Pos(0, 1);
+						 		general_data.Increm_Screen_Pos(0,1);
 					 }
-					 if (0.3*0.2*time>1) 	 general_data.Increm_Screen_Pos(0, 1);
-					 else
-						 general_data.Increm_Screen_Pos(0, 0.3*0.2*time);
+				
+
+					 //if (0.3*0.2*time > 1)
+					 //{
+						// 
+						// general_data.Increm_Screen_Pos(0, 1);
+					 //}
+					 //else
+					 //{
+						// cout << endl << ">";
+						// general_data.Increm_Screen_Pos(0, 1);
+					 //}
 					 break;
 	case climb:
 		break;

@@ -8,6 +8,7 @@ class Control
 	Character& Player;
 	General_Data& general_data;
 	sf::Clock& clock;
+	float y = 0;
 	public: 
 		Control(Character& Char, General_Data& data,sf::Clock& clock):Player(Char), general_data(data),clock(clock)
 	{}

@@ -12,11 +12,19 @@
 	
 	// Character& Player;
 
-	sf::RenderTexture& background_texture;
+	sf::RenderTexture& background_texture_1;
+
+	sf::RenderTexture& background_texture_2;
 	sf::RenderTexture map_texture;
 	sf::RenderWindow& window;
 	General_Data& data;
 public:
+	sf::Vector2i buffer_background_texture = sf::Vector2i (1, 1);
+	const float sizeMapX = 60.;
+	const float sizeMapY = 60.;
+
+	bool toogle_bg_tex = false;
+
 	string TileMap[100] = {
 		//	 1234567890123456789012345678901234567890
 		"01                                                    0",
@@ -61,7 +69,7 @@ public:
 	int g = 4;
 
 
-	Map(sf::RenderTexture&,sf::RenderWindow&, General_Data& ) ;
+	Map(sf::RenderTexture&, sf::RenderTexture&,sf::RenderWindow&, General_Data& ) ;
 
 	sf::Sprite  sprite_buffer[10];
 
@@ -70,10 +78,11 @@ public:
 
 	void Map::DrawMap(sf::RenderTexture&,float,float);
 	void Map::DrawMap_save(sf::RenderTexture&);
+	void Map::DrawMap_async(sf::RenderTexture&);
 	void Map::Draw_Elements();
 	void Map::Init();
 	bool Map::IsMapChanged();
-
+	sf::Vector2i Get_Last_Pos();
 	Up_Stair stair;
 	bool Map::Check_();
 

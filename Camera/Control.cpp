@@ -73,7 +73,7 @@ void Control::move_logic()
 			{
 				if (Player.State != inair)
 				{
-						cout << endl << "DD=" << Player.Status;
+					//	cout << endl << "DD=" << Player.Status;
 					if (Player.Status == balancing) /*cout << endl << Player.GetDir();*/
 					{
 
@@ -221,8 +221,23 @@ void Control::climb_control()
 
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 	{
-		general_data.Increm_Screen_Pos(0, 1);
-		/*		if (Player.Status == waiting) 	Player.State = crouch;
+
+	/*	float b = clock.getElapsedTime().asMicroseconds() - y;
+		y = clock.getElapsedTime().asMicroseconds();
+		if (b > 5000) {
+			general_data.Increm_Screen_Pos(0, 1);
+
+			int z = b / 5000;
+			cout << endl << "z= " << z << "   " << b << " " << y;
+			if (z > 3) z = 1;
+			for (int i = 0; i <= z; i++)
+			{
+				cout << endl << "z= " << z;
+				general_data.Increm_Screen_Pos(0, 1);
+			}
+		}*/
+	//	cout << endl << "climb" << b;
+				if (Player.Status == waiting) 	Player.State = crouch;
 		if (Player.Can_Climbing()) {
 		if (Player.Status != climb_down)
 		{
@@ -236,14 +251,14 @@ void Control::climb_control()
 		{
 		if ((Player.Status == waiting && Player.State != inair&&
 		Player.Status != climb_down&&Player.Status != climb_up&&Player.Status != climb) && !Player.jumped) {
-		Player.State = standing; gl_clock.restart();
+		Player.State = standing; clock.restart();
 		}
 
 		if (Player.Can_Climbing() && Player.Status == climb_down)
 		{
 		Player.Status = climb;
 		Player.dx = 0;
-		}*/
+		}
 	}
 
 }
