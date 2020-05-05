@@ -28,8 +28,8 @@ public:
 		real_pos.x += a;
 		real_pos.y += b;
 
-		screen_pos.x =truncf(real_pos.x);
-		screen_pos.y =truncf(real_pos.y);
+		screen_pos.x =/*truncf*/(real_pos.x);
+		screen_pos.y =/*truncf*/(real_pos.y);
 
 //		screen_pos.x += a;
 //		screen_pos.y += b;

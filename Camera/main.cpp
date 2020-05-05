@@ -11,7 +11,7 @@
 
 
 
-int main_main()
+int main_()
 {
 	sf::RenderTexture background_texture;
 	background_texture.create(1200, 1000);
@@ -24,7 +24,7 @@ int main_main()
 	//	window.setFramerateLimit(90);
 	window.setVerticalSyncEnabled(true);
 	camera.reset(sf::FloatRect(0, 0, 1200, 800));
-//	camera.setCenter(1000*1.f, 400*1.f);
+	//	camera.setCenter(1000*1.f, 400*1.f);
 	window.setView(camera);
 	float time, counter, tx, tz;
 	counter = 0;
@@ -34,7 +34,7 @@ int main_main()
 	Map map(background_texture, background_texture, window, general_data);
 	Character Player = Character(1, time, general_data, map);
 	sf::Clock gl_clock;
-	sf::Clock clock,fps_clock;
+	sf::Clock clock, fps_clock;
 	bool pr = false;
 
 	Control controls = Control(Player, general_data, gl_clock);
@@ -53,19 +53,19 @@ int main_main()
 	{
 		sf::Event e;
 		//cout << endl << "time"<< clock.getElapsedTime().asMicroseconds();
-		if (clock.getElapsedTime().asMilliseconds() > int(1000/60))
+		if (clock.getElapsedTime().asMilliseconds() > int(1000 / 60))
 		{
-		counter = GetTickCount();
-		time = clock.getElapsedTime().asMicroseconds();
-		fps++;
-		if (fps_clock.getElapsedTime().asMilliseconds() > 1000)
-		{
-			fps_clock.restart();
-			cout << endl << fps;
-			fps = 0;
-			
-		}
-		clock.restart();
+			counter = GetTickCount();
+			time = clock.getElapsedTime().asMicroseconds();
+			fps++;
+			if (fps_clock.getElapsedTime().asMilliseconds() > 1000)
+			{
+				fps_clock.restart();
+				cout << endl << fps;
+				fps = 0;
+
+			}
+			clock.restart();
 			time /= 800;
 
 
@@ -117,10 +117,10 @@ int main_main()
 			//	background_sprite.setPosition(sf::Vector2f(round(-tx), round(-tz)));
 			float d = 1;
 
-		/*	if ((int(tx) - int(last[0])) >= d ||
-				(int(tx) - int(last[0]) <= -d) ||
-				(int(tz) - int(last[1]) >= d) ||
-				(int(tz) - int(last[1]) <= -d))*/
+			/*	if ((int(tx) - int(last[0])) >= d ||
+			(int(tx) - int(last[0]) <= -d) ||
+			(int(tz) - int(last[1]) >= d) ||
+			(int(tz) - int(last[1]) <= -d))*/
 
 			{
 
@@ -131,19 +131,19 @@ int main_main()
 				last[0] = tx;
 				last[1] = tz;
 			}
-	
-		
 
-			
-		//	if (con == 10)
+
+
+
+			//	if (con == 10)
 			{
-				camera.setCenter((int)camera.getCenter().x+0,(int) camera.getCenter().y+con);
-			//	camera.move(0, con);
-			//	con = 0;
+				camera.setCenter(/*(int)*/camera.getCenter().x + 0,/*(int)*/ camera.getCenter().y + con);
+				//	camera.move(0, con);
+				//	con = 0;
 			}
 			window.setView(camera);
 			window.clear();
-			
+
 			//	background_sprite.setPosition(sf::Vector2f(round(-map.buffer_background_texture.x*map.sizeMapX), round(-map.buffer_background_texture.y*map.sizeMapY)));
 			window.draw(background_sprite);
 
@@ -151,117 +151,6 @@ int main_main()
 			window.draw(Player.herosprite);
 			window.display();
 		}
-		
-	}
-
-	return 0;
-
-}
-
-
-int main_smooth()
-{
-	sf::RenderTexture background_texture;
-	background_texture.create(1200, 1000);
-	bool count = false;
-	int fps = 0;
-	sf::Texture tex;
-	sf::Sprite background_sprite,sprite;
-	background_sprite.setTexture(background_texture.getTexture());
-	int con = 0;
-	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default);
-	camera.reset(sf::FloatRect(0, 0, 1200, 800));
-	//	camera.setCenter(1000*1.f, 400*1.f);
-	window.setView(camera);
-	float time, counter, tx, tz;
-	counter = 0;
-	counter = GetTickCount();
-//window.setFramerateLimit(60);
-	window.setVerticalSyncEnabled(true);
-	sf::Clock gl_clock;
-	sf::Clock clock, fps_clock;
-	bool pr = false;
-
-	float runspeed = 0.007;
-	//	InitMap(background_texture);
-	//	Entity en(400, 300, 0, 0);
-	sf::Time updateTime;
-
-	float last[2] = { 0, 0 };
-
-	tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
-	tex.setSmooth(true);
-//sprite.setScale(1.3, 1.3);
-	sprite.setTexture(tex);
-	sprite.setTextureRect(sf::IntRect(0, 0, 600, 600));
-	sprite.setOrigin(0, 0);
-	window.draw(sprite);
-	sf::Sprite ar[30] = {};
-//	sprite.setTextureRect(sf::IntRect(0, 0, 66, 60));  sprite.setOrigin(0, 0);
-
-	while (window.isOpen())
-
-	{
-		sf::Event e;
-		//cout << endl << "time"<< clock.getElapsedTime().asMicroseconds();
-	//	if (clock.getElapsedTime().asMilliseconds() > int(1000 / 60))
-		{
-			counter = GetTickCount();
-			time = clock.getElapsedTime().asMicroseconds();
-			fps++;
-			if (fps_clock.getElapsedTime().asMilliseconds() > 1000)
-			{
-				fps_clock.restart();
-				cout << endl << fps;
-				fps = 0;
-
-			}
-			clock.restart();
-			time /= 800;
-
-
-
-			while (window.pollEvent(e))
-			{
-				if (e.type == sf::Event::Closed)
-					window.close();
-			}
-
-
-
-		
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-			{
-				con =1;
-			}
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
-			{
-				con = -1;
-			}
-
-		
-			{
-				camera.setCenter(round(camera.getCenter().x + 0), round(camera.getCenter().y + con));
-		
-			}
-
-			if ((int)camera.getCenter().y == (int)camera.getCenter().y + con)
-				cout << endl << "int "<< (int)camera.getCenter().y;
-				//		sprite.setPosition(sprite.getPosition().x, sprite.getPosition().y+con);
-			window.clear();
-
-	//		window.draw(sprite);
-			window.draw(sprite);
-
-			window.setView(camera);
-		//	window.clear();
-	
-	
-			window.display();
-		
-		}
 
 	}
 
@@ -269,231 +158,78 @@ int main_smooth()
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-class game 
+class Gen_data
 {
-
-	sf::RenderWindow window;
-	sf::View Camera;
-	sf::Thread render_thread;
-	sf::Clock gl_clock;
-
-	int con = 0;
-	float time = 0.f;
-	float delta = 0.f;
 public:
-	game()
-		: window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default),
-		  render_thread (&game::render, this)
+	sf::Vector2f screen_pos;
+	sf::Vector2f motion_vel;
+
+	Gen_data(float a, float  b)
+		: screen_pos(a, b)
 	{
-		window.setVerticalSyncEnabled(true);
-		Camera.reset(sf::FloatRect(0, 0, 1200, 800));
-
-	};
-
-
-
-	void run();
-
-		   void render();
-		   void game_logic();
-};
-
-void game :: render()
-{
-	sf::Texture tex;
-	sf::Sprite  sprite;
-	sf::Clock clock;
-	tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
-	tex.setSmooth(true);
-
-	window.setActive(true);
-
-	sprite.setTexture(tex);
-	sprite.setTextureRect(sf::IntRect(0, 0, 600, 600));
-	sprite.setOrigin(0, 0);
-
-	while (window.isOpen())
-	{
-		window.clear();
-		window.draw(sprite);
-		
-
-		float time = gl_clock.getElapsedTime().asMicroseconds();
-		gl_clock.restart();
-		float v = 1.f * 60 / 1000000;
-		delta += (time* con*v);
-
-			Camera.move(0, round(delta));
-			delta = 0.f;
-//delta -=round(delta);
-			window.setView(Camera);
-
-		window.display();
-
-		//	sf::sleep(sf::milliseconds(10));
+		motion_vel = { 0.f,0.f };
 	}
 };
 
-void game::run()
+class Render
 {
-	window.setActive(false);
-	render_thread.launch();
-	game_logic();
-};
-
-void game::game_logic()
-{
-	sf::Vector2f pos = Camera.getCenter();
-	while (window.isOpen())
-	{
-
-		time = gl_clock.getElapsedTime().asMicroseconds();
-		gl_clock.restart();
-
-	//	time /= 800;
-
-		sf::Event e;
-		while (window.pollEvent(e))
-		{
-			if (e.type == sf::Event::Closed)
-				window.close();
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-		{
-			//cout << endl << "sss";
-			con = 1;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
-		{
-
-			con = -1;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		{
-
-			window.close();
-
-		}
-		float v = 1.f*60 /  1000000;
-		cout <<endl<< "time" <<delta ;
-		delta +=(time* con*v);
-
-		int x=int((Camera.getCenter().y - pos.y));
-	//	cout <<endl<< "x="<< x<<"  "<< pos.y<<"  " <<time<<"   "<<Camera.getCenter().y;
-	//	if (abs(x)>10)getchar();
-	
-			//	Camera.setCenter(round(Camera.getCenter().x + 0), round(Camera.getCenter().y + x));
-		//		Camera.move( 0, con );
-				
-
-//if (x != 0)
-		//		 pos = Camera.getCenter();
-	
-
-	//	Camera.setCenter(round(pos.x),round(pos.y));
-//Camera.move({ 0,con*0.07f });
-	//	sf::sleep(sf::milliseconds(16.5));
-	}
-}
-
-
-
-
-
-
-class new_Game
-{
-	sf::RenderWindow window;
+	sf::Sprite sprite;
 	sf::View camera;
-	sf::Clock clock;
-	sf::Thread logic_thread;
-	int frame[2] = { 0,0 };
-	int con = 0;
-	sf::Vector2f pos;
-public: 
-	new_Game() 
-		:window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default),
-		logic_thread(&new_Game::logic, this)
-	{
-		camera.reset(sf::FloatRect(0, 0, 1200, 800));
-		window.setVerticalSyncEnabled(true);
-		pos=  camera.getCenter();
-	}
-
-	void run();
-	void render();
-	void logic();
-};
-
-
-void new_Game::render()
-{
 	sf::Texture tex;
-	sf::Sprite  sprite;
-	tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
-	tex.setSmooth(true);
-	
-	
-	sprite.setTexture(tex);
-	sprite.setTextureRect(sf::IntRect(0, 0, 600, 600));
-	sprite.setOrigin(0, 0);
-	window.draw(sprite);
+	Gen_data& general_data;
 	int acc = 0;
 
-	while (window.isOpen())
+public:
+	sf::RenderWindow window;
+
+	Render(Gen_data & general_data)
+		: general_data(general_data),
+		  window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default)
 	{
-		window.clear();
-		if (abs(round(camera.getCenter().y - pos.y)) > abs
-			(10))
+		tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
+		tex.setSmooth(true);
+
+		sprite.setTexture(tex);
+		sprite.setTextureRect(sf::IntRect(0, 0, 600, 600));
+		sprite.setOrigin(0, 0);
+
+		window.setVerticalSyncEnabled(true);
+		camera.reset(sf::FloatRect(0, 0, 1200, 800));
+	}
+
+	void motion();
+	void run();
+
+};
+
+
+
+void Render::motion()
+{
+	float new_pos = general_data.screen_pos.y;
+
+	if (abs((camera.getCenter().y - (new_pos))) > abs(10))
+	{
+		camera.setCenter(camera.getCenter().x, (general_data.screen_pos.y));
+		acc = 0;
+	}
+	else
+	{
+		if (abs((camera.getCenter().y - new_pos)) > abs(5))
 		{
-			//getchar();
-			camera.setCenter(camera.getCenter().x, round(pos.y));
-			acc = 0;
+			acc = general_data.motion_vel.y;
 		}
-		else {
-			if (abs(round(camera.getCenter().y - pos.y)) > abs
-				(5))
-				//	camera.setCenter(camera.getCenter().x, round(pos.y));
-				acc = con;
-			else acc = 0;
-			cout << endl << "  " << pos.y << "   " << camera.getCenter().y;
-			camera.move(0, con + acc);
-		}
-			window.setView(camera);
-	
-		window.draw(sprite);
-		window.display();
-	//	cout << endl << "frame[0]";
-		frame[0]++;
-	
+		else acc = 0;
+
+		camera.move(0, general_data.motion_vel.y + acc);
 	}
 }
 
-void new_Game::logic()
+void Render::run()
 {
-	float time = 0.f;
-
 
 	while (window.isOpen())
 	{
-
-		float v = 1.f * 62 / 1000000;
 
 		sf::Event e;
 		while (window.pollEvent(e))
@@ -502,305 +238,95 @@ void new_Game::logic()
 				window.close();
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-		{
-			con = 1;
-		}
+		window.clear();
+		window.setView(camera);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
-		{
-			con = -1;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		{
-			window.close();
-		}
-
-		//if (frame[1] != frame[0])
-		{
-		//	cout << frame[0] << "   " << frame[1];
-			//if (frame[0] - frame[1] > 1) cout <<endl<< "!!!"<<frame[0]<<"   "<<frame[1];
-			//camera.move(0,round( con));
-			float time = clock.getElapsedTime().asMicroseconds();
-			clock.restart();
-			pos.y += time*v*con;
-			frame[1] = frame[0];
-			
-		}
-//		sf::milliseconds(16);
+		motion();
+		window.draw(sprite);
+		window.display();
 	}
 }
 
 
-void new_Game::run()
+class Game
+{
+	sf::Clock clock;
+	sf::Thread logic_thread;
+
+	Gen_data general_data;
+
+	Render render;
+	int con = 0;
+	sf::Vector2f pos;
+
+public:
+	Game()
+		:logic_thread(&Game::logic, this),
+		general_data(0.f, 0.f),
+		render(general_data)
+	{
+		pos = camera.getCenter();
+	}
+
+	void run();
+
+	void logic();
+
+	void control();
+};
+
+
+void Game::control()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+	{
+		general_data.motion_vel.y = 1;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
+	{
+		general_data.motion_vel.y = -1;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	{
+		render.window.close();
+	}
+}
+
+
+void Game::logic()
+{
+
+	while (render.window.isOpen())
+	{
+
+		float v = 1.f * 60.f / 1000000.f;
+
+		control();
+
+		float time = clock.getElapsedTime().asMicroseconds();
+		clock.restart();
+	
+		general_data.screen_pos.y += time*v*general_data.motion_vel.y;
+	
+		sf::sleep(sf::milliseconds(1));
+	}
+}
+
+
+void Game::run()
 {
 	logic_thread.launch();
-	render();
+	render.run();
 }
 
 int main()
 {
-	//game g;
-	new_Game g;
-	g.run();
+
+	Game game;
+	game.run();
 
 
 	return 0;
-}
-
-//class Game {
-//	int con = 0;
-//	sf::RenderWindow window;
-//	sf::View Camera;
-//	float delta;
-//	sf::Thread  logic_thread;
-//	sf::Clock gl_clock;
-//public:
-//
-//	Game()
-//		:window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default),
-//
-//		logic_thread(&Game::game_logic,this)
-//
-//	{
-//		Camera.reset(sf::FloatRect(0, 0, 1200, 800));
-//		window.setVerticalSyncEnabled(true);
-//
-//	};
-//	void display();
-// void	render();
-// void game_logic();
-// void run();
-//
-//};
-//
-//void Game::display()
-//{
-//	window.setActive(true);
-//	window.display();
-//}
-//
-//void Game::run()
-//{
-////	window.setActive(false);
-//	//	render_thread.launch();
-//	logic_thread.launch();
-//	render();
-//	
-//	//	game_logic();
-//}
-//
-//void Game::render()
-//{
-//
-//	sf::Texture tex;
-//	sf::Sprite  sprite;
-//	sf::Clock clock;
-//	tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
-//	tex.setSmooth(true);
-//
-//
-//	sprite.setTexture(tex);
-//	sprite.setTextureRect(sf::IntRect(0, 0, 600, 600));
-//	sprite.setOrigin(0, 0);
-//	window.draw(sprite);
-//
-//	sf::Vector2f pos = Camera.getCenter();
-//	sf::Vector2f cam_pos = Camera.getCenter();
-//	while (window.isOpen())
-//	{
-//
-//
-//		 float	v = 1.f * 60 / 1000000;
-//			float y= gl_clock.getElapsedTime().asMicroseconds()*con*v;
-//		
-//		//	delta += y;
-//		
-//		//	gl_clock.restart();
-//
-//			pos.y += delta;
-//	
-//			cout << endl<< "del" << round(pos.y);
-//		Camera.setCenter(round(Camera.getCenter().x + 0), round(pos.y ));
-//
-//
-//
-//		cam_pos = Camera.getCenter();
-//			
-//			window.clear();
-//			window.setView(Camera);
-//
-//		window.draw(sprite);
-//
-//		delta = 0.f;
-//		window.display();
-//
-//
-//	}
-//}
-//
-//
-//
-//
-//void Game::game_logic()
-//{
-//	float time = 0.f;
-//	
-//	sf::Clock clock, fps_clock;
-//	sf::Vector2f pos = Camera.getCenter();
-//	while (window.isOpen())
-//	{
-//		time = gl_clock.getElapsedTime().asMicroseconds();
-//		gl_clock.restart();
-//
-//		sf::Event e;
-//		while (window.pollEvent(e))
-//		{
-//			if (e.type == sf::Event::Closed)
-//				window.close();
-//		}
-//
-//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-//		{
-//			con = 1;
-//		}
-//
-//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
-//		{
-//			con = -1;
-//		}
-//
-//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-//		{
-//			window.close();
-//		}
-//
-//		float	v = 1.f * 59 / 1000000;
-//		delta +=(time* con*v);
-//	//	cout <<endl<< "run" << time <<"   "<< v;
-//
-//		sf::milliseconds(1);
-//	}
-//}
-//
-//int main()
-//{
-//	Game g;
-//		g.run();
-//	return 0;
-//}
-
-
-
-int mainjg()
-{
-	sf::RenderTexture background_texture;
-	background_texture.create(1200, 1000);
-	bool count = false;
-	int fps = 0;
-	sf::Texture tex;
-	sf::Sprite background_sprite, sprite;
-	background_sprite.setTexture(background_texture.getTexture());
-	int con = 0;
-	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default);
-	camera.reset(sf::FloatRect(0, 0, 1200, 800));
-	//	camera.setCenter(1000*1.f, 400*1.f);
-	window.setView(camera);
-	float time, counter, tx, tz;
-	counter = 0;
-	counter = GetTickCount();
-	//window.setFramerateLimit(60);
-	window.setVerticalSyncEnabled(true);
-	sf::Clock gl_clock;
-	sf::Clock clock, fps_clock;
-	bool pr = false;
-
-	float runspeed = 0.007;
-	//	InitMap(background_texture);
-	//	Entity en(400, 300, 0, 0);
-	sf::Time updateTime;
-
-	float last[2] = { 0, 0 };
-
-	tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
-	tex.setSmooth(true);
-
-
-	//sprite.setScale(1.3, 1.3);
-	sprite.setTexture(tex);
-	sprite.setTextureRect(sf::IntRect(0, 0, 600, 600));
-	sprite.setOrigin(0, 0);
-	window.draw(sprite);
-
-	//	sprite.setTextureRect(sf::IntRect(0, 0, 66, 60));  sprite.setOrigin(0, 0);
-
-	while (window.isOpen())
-
-	{
-		sf::Event e;
-		//cout << endl << "time"<< clock.getElapsedTime().asMicroseconds();
-		//	if (clock.getElapsedTime().asMilliseconds() > int(1000 / 60))
-		{
-			counter = GetTickCount();
-			time = clock.getElapsedTime().asMicroseconds();
-			fps++;
-			if (fps_clock.getElapsedTime().asMilliseconds() > 1000)
-			{
-				fps_clock.restart();
-				cout << endl << fps;
-				fps = 0;
-
-			}
-			clock.restart();
-			time /= 800;
-
-
-
-			while (window.pollEvent(e))
-			{
-				if (e.type == sf::Event::Closed)
-					window.close();
-			}
-
-
-
-
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-			{
-				con = 1;
-			}
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
-			{
-				con = -1;
-			}
-
-
-			{
-				camera.setCenter(round(camera.getCenter().x + 0), round(camera.getCenter().y + con));
-
-			}
-
-			if ((int)camera.getCenter().y == (int)camera.getCenter().y + con)
-				cout << endl << "int " << (int)camera.getCenter().y;
-			//		sprite.setPosition(sprite.getPosition().x, sprite.getPosition().y+con);
-			window.clear();
-
-			//		window.draw(sprite);
-			window.draw(sprite);
-
-			window.setView(camera);
-			//	window.clear();
-
-
-			window.display();
-
-		}
-
-	}
-
-	return 0;
-
 }

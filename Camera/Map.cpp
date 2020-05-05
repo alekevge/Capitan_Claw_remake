@@ -267,16 +267,16 @@ void Map::DrawMap(sf::RenderTexture& bg_texture,float dx,float dy)
 			{
 				switch (TileMap[j][i])
 				{
-				case '0': sprite_buffer[0].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[0]); break;
-				case '1': sprite_buffer[1].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[1]); break;
-				case '2': sprite_buffer[2].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[2]); break;
-				case '3': sprite_buffer[3].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[3]); break;
-				case '4': sprite_buffer[4].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[4]); break;
-				case '5': sprite_buffer[5].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[5]); break;
-				case '6': sprite_buffer[6].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[6]); break;
-				case '7': sprite_buffer[7].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[7]); break;
-				case '8': sprite_buffer[8].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[8]); break;
-				case ' ': sprite_buffer[9].setPosition(sf::Vector2f(round(dx+(i - i_0) * 60), round(dy+(j - j_0) * 60))); bg_texture.draw(sprite_buffer[9]); break;
+				case '0': sprite_buffer[0].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[0]); break;
+				case '1': sprite_buffer[1].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[1]); break;
+				case '2': sprite_buffer[2].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[2]); break;
+				case '3': sprite_buffer[3].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[3]); break;
+				case '4': sprite_buffer[4].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[4]); break;
+				case '5': sprite_buffer[5].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[5]); break;
+				case '6': sprite_buffer[6].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[6]); break;
+				case '7': sprite_buffer[7].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[7]); break;
+				case '8': sprite_buffer[8].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy + (j - j_0) * 60))); bg_texture.draw(sprite_buffer[8]); break;
+				case ' ': sprite_buffer[9].setPosition(sf::Vector2f(/*round*/(dx+(i - i_0) * 60), /*round*/(dy+(j - j_0) * 60))); bg_texture.draw(sprite_buffer[9]); break;
 					//		case 'r':  map_s.setTextureRect(sf::IntRect(325, 0, 66, 60));  map_s.setOrigin(-6, 0); break;
 					//		case 't':  map_s.setTextureRect(sf::IntRect(325, 65, 66, 60));  map_s.setOrigin(-6, 0); break;
 					//		case 's':  map_s.setTextureRect(sf::IntRect(325, 130,66, 40));  map_s.setOrigin(-6, 0); break;
@@ -301,8 +301,8 @@ void Map::DrawMap(sf::RenderTexture& bg_texture,float dx,float dy)
 	Draw_Elements();
 
 	bg_texture.display();
-	last_map_pos[0] = round(V_c.x);//% 60;
-	last_map_pos[1] = round(V_c.y); //% 60;
+	last_map_pos[0] = /*round*/(V_c.x);//% 60;
+	last_map_pos[1] = /*round*/(V_c.y); //% 60;
 };
 
 
