@@ -3,7 +3,7 @@
 #include <windows.h>
 #include "Map.h"
 #include "AnimationMainHero.h"
-#include "Camera.h"
+//#include "Camera.h"
 #include "General_Data.h"
 #include "Control.h"
 #include "windows.h"
@@ -158,6 +158,8 @@ int main_()
 
 }
 
+
+
 class Gen_data
 {
 public:
@@ -171,20 +173,81 @@ public:
 	}
 };
 
+
+class Camera
+{
+	
+	Gen_data& general_data;
+	sf::Vector2i acc = { 0,0 };
+
+public:
+	sf::View view;
+
+	Camera(Gen_data& general_data, sf::FloatRect rect=sf::FloatRect(0,0,1200,800))
+		: general_data(general_data)
+	{
+		view.reset(rect);
+	}
+
+
+
+	void move();
+	void update_view();
+
+
+};
+
+void Camera::move()
+{
+
+}
+
+
+void Camera::update_view()
+{
+
+	if (abs((view.getCenter().y - (general_data.screen_pos.y))) > abs(10)
+		|| abs((view.getCenter().x - (general_data.screen_pos.x))) > abs(10)
+		)
+	{
+		view.setCenter(general_data.screen_pos);
+		acc = { 0,0 };
+
+	}
+	else
+	{
+		sf::Vector2f pos = view.getCenter() - general_data.screen_pos;
+		if (abs(pos.x) > 5 )
+		{
+			acc.y = general_data.motion_vel.y;
+		}
+		else acc.y = 0;
+
+		if (abs(pos.y) > 5)
+		{
+			acc.x = general_data.motion_vel.x;
+		} 
+		else acc.x = 0;
+		
+		view.move(general_data.motion_vel +sf::Vector2f(acc));
+	}
+}
+
 class Render
 {
 	sf::Sprite sprite;
-	sf::View camera;
 	sf::Texture tex;
 	Gen_data& general_data;
-	int acc = 0;
+	Camera camera;
+
 
 public:
 	sf::RenderWindow window;
 
 	Render(Gen_data & general_data)
 		: general_data(general_data),
-		  window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default)
+		  window(sf::VideoMode(1200, 800), "SFML works!", sf::Style::Default),
+		  camera(general_data,sf::FloatRect(0,0,1200,800))
 	{
 		tex.loadFromFile("Images\\PC Computer - Captain Claw - Level 1 Tiles_2.png", sf::IntRect(130, 65, 600, 600));
 		tex.setSmooth(true);
@@ -194,7 +257,7 @@ public:
 		sprite.setOrigin(0, 0);
 
 		window.setVerticalSyncEnabled(true);
-		camera.reset(sf::FloatRect(0, 0, 1200, 800));
+	
 	}
 
 	void motion();
@@ -206,23 +269,7 @@ public:
 
 void Render::motion()
 {
-	float new_pos = general_data.screen_pos.y;
-
-	if (abs((camera.getCenter().y - (new_pos))) > abs(10))
-	{
-		camera.setCenter(camera.getCenter().x, (general_data.screen_pos.y));
-		acc = 0;
-	}
-	else
-	{
-		if (abs((camera.getCenter().y - new_pos)) > abs(5))
-		{
-			acc = general_data.motion_vel.y;
-		}
-		else acc = 0;
-
-		camera.move(0, general_data.motion_vel.y + acc);
-	}
+	camera.update_view();
 }
 
 void Render::run()
@@ -239,9 +286,10 @@ void Render::run()
 		}
 
 		window.clear();
-		window.setView(camera);
 
-		motion();
+		camera.update_view();
+		window.setView(camera.view);
+
 		window.draw(sprite);
 		window.display();
 	}
@@ -256,8 +304,8 @@ class Game
 	Gen_data general_data;
 
 	Render render;
-	int con = 0;
-	sf::Vector2f pos;
+  
+	int speed = 3;
 
 public:
 	Game()
@@ -265,7 +313,7 @@ public:
 		general_data(0.f, 0.f),
 		render(general_data)
 	{
-		pos = camera.getCenter();
+
 	}
 
 	void run();
@@ -278,15 +326,38 @@ public:
 
 void Game::control()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-	{
-		general_data.motion_vel.y = 1;
-	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::T)
+		|| (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::G))
+
+		)
 	{
-		general_data.motion_vel.y = -1;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+		{
+			general_data.motion_vel.y = 1*speed;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::G))
+		{
+			general_data.motion_vel.y = -1*speed;
+		}
 	}
+	else general_data.motion_vel.y = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			general_data.motion_vel.x = 1*speed;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			general_data.motion_vel.x = -1*speed;
+		}
+	}
+	else general_data.motion_vel.x = 0;
+
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
@@ -308,7 +379,7 @@ void Game::logic()
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
 	
-		general_data.screen_pos.y += time*v*general_data.motion_vel.y;
+		general_data.screen_pos += time*v*general_data.motion_vel;
 	
 		sf::sleep(sf::milliseconds(1));
 	}

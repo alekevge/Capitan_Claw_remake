@@ -6,12 +6,17 @@ main.cpp(31): warning C4244: =: преобразование "DWORD" в "float",
 main.cpp(42): warning C4305: инициализация: усечение из "double" к "float"
 main.cpp(58): warning C4244: =: преобразование "DWORD" в "float", возможна потеря данных
 main.cpp(59): warning C4244: =: преобразование "sf::Int64" в "float", возможна потеря данных
-main.cpp(220): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-main.cpp(308): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
+main.cpp(222): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+main.cpp(228): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+main.cpp(337): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(342): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(351): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(356): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+main.cpp(379): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
   Создание кода
-  14 of 224 functions ( 6.3%) were compiled, the rest were copied from previous compilation.
+  13 of 231 functions ( 5.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   Camera.vcxproj -> D:\Курсы Специалист\C++\Project\Camera_remake\Release\Camera.exe
   Camera.vcxproj -> D:\Курсы Специалист\C++\Project\Camera_remake\Release\Camera.pdb (Full PDB)
